@@ -21,16 +21,11 @@ export class ListCustomersComponent {
   toastService = inject(ToastService);
   modalService = inject(NgbModal);
 
-  successElement = viewChild<TemplateRef<any>>('success');
-  errorElement = viewChild<TemplateRef<any>>('error');
-
+  customers: CustomerI[] = [];
   searchText = new FormControl<string>('', {nonNullable: true});
-
   itemsPerPage = 4;
   currentPage = 1;
   collectionSize = 0;
-
-  customers: CustomerI[] = [];
 
   ngOnInit(): void {
     this.getCustomers();

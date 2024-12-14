@@ -80,10 +80,13 @@
         [allowClear]="true"
         [items]="customerNames"
         [multiple]="true"
-        placeholder="Select collaborators"
-        [class.is-invalid]="pinForm.get('collaborators')?.invalid && pinForm.get('collaborators')?.touched"
+        placeholder="Select collaboratory"
+        [class.is-invalid]="pinForm.get('collaborators')?.invalid && pinForm.get('collaborators')?.touched || customerNames.length === 0"
       >
       </ngx-select>
+      <div class="invalid-feedback" *ngIf="customerNames.length === 0">
+        No collaborator found
+      </div>
       <div class="invalid-feedback" *ngIf="pinForm.get('collaborators')?.errors?.['required']">
         At least one collaborator is required
       </div>

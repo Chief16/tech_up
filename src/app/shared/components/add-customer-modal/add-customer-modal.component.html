@@ -29,6 +29,7 @@
         class="form-control" 
         id="email" 
         formControlName="email"
+        autocomplete="off"
         [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
       >
       <div class="invalid-feedback" *ngIf="userForm.get('email')?.errors?.['required']">
@@ -58,7 +59,7 @@
       <ngx-select
         formControlName="country"
         [items]="countries"
-        placeholder="Select a region"
+        placeholder="Select a country"
         [class.is-invalid]="userForm.get('country')?.invalid && userForm.get('country')?.touched"
       >
       </ngx-select>

@@ -22,17 +22,11 @@ export class ListPinsComponent implements OnInit {
   toastService = inject(ToastService);
   modalService = inject(NgbModal);
 
-  successElement = viewChild('success');
-  errorElement = viewChild('error');
-
+  pins: PinI[] = [];
   searchText = new FormControl<string>('', {nonNullable: true});
-
   itemsPerPage = 4;
   currentPage = 1;
   collectionSize = 0;
-
-  pins: PinI[] = [];
-  images: any[] = [];
 
   ngOnInit(): void {
     this.getPins();
@@ -61,9 +55,7 @@ export class ListPinsComponent implements OnInit {
         this.toastService.show({ template: success });
         this.getPins();
       },
-      (reason) => {
-        // this.toastService.show({ template: error, classname: 'bg-danger text-light' });
-      }
+      (reason) => {}
     );
   }
 
@@ -76,9 +68,5 @@ export class ListPinsComponent implements OnInit {
     const filteredPins = this.pins.filter((pin) => pin?.title.includes(this.searchText.value));
     this.collectionSize = filteredPins.length;
     return filteredPins;
-  }
-
-  getImage(imageName: string){
-    return this.images?.find((img) => img.filename === imageName)?.url;
   }
 }
