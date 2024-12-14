@@ -45,9 +45,8 @@ export class ListPinsComponent implements OnInit {
           ...pin,
           image: encodeURI(pin.image)
         }
-      });
+      }).reverse();
     this.collectionSize = this.pins.length;
-    this.getImages();
   }
 
   addPin( success: TemplateRef<string>, error: TemplateRef<string>, pin?: PinI) {
@@ -77,13 +76,6 @@ export class ListPinsComponent implements OnInit {
     const filteredPins = this.pins.filter((pin) => pin?.title.includes(this.searchText.value));
     this.collectionSize = filteredPins.length;
     return filteredPins;
-  }
-
-  getImages() {
-    this.pinsService.getAllPinImages().subscribe((images) => {
-      this.images = images;
-      console.log(this.images);
-    });
   }
 
   getImage(imageName: string){

@@ -21,7 +21,7 @@ import { PinI } from '../../models/pin';
     NgIf,
     NgxSelectModule,
     FileUploadModule,
-    NgClass,
+    NgClass
   ],
   providers: [CustomerService, PinsService],
   templateUrl: './add-pin-modal.component.html',
@@ -62,6 +62,7 @@ export class AddPinModalComponent implements OnInit {
       this.pinForm.patchValue(this.pin);
       this.previewUrl = this.pin.image;
       this.hasFile = true;
+      this.pinForm.get('title')!.disable();
     }
     this.uploader.onAfterAddingFile = (fileItem) => {
       fileItem.withCredentials = false; // Important for CORS

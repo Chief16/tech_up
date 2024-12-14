@@ -39,6 +39,7 @@ export class AddCustomerModalComponent implements OnInit {
     });
     if(this.customer){
       this.userForm.patchValue(this.customer);
+      this.userForm.get('title')?.disable();
     }
   }
 
@@ -57,12 +58,7 @@ export class AddCustomerModalComponent implements OnInit {
       }
       this.activeModal.close(true);
     } else {
-      Object.keys(this.userForm.controls).forEach(key => {
-        const control = this.userForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
-        }
-      });
+      this.userForm.markAllAsTouched();
     }
   }
 }

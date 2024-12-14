@@ -4,7 +4,7 @@ import { ListCustomersComponent } from './components/list-customers/list-custome
 
 export const routes: Routes = [
   { path: 'pins', component: ListPinsComponent },
-  { path: 'customers', component: ListCustomersComponent },
+  { path: 'customers', loadComponent:() => import('./components/list-customers/list-customers.component').then(m => m.ListCustomersComponent) },
   { path: '', redirectTo: '/pins', pathMatch: 'full' },
   { path: '**', redirectTo: '/pins' },
 ];

@@ -41,10 +41,6 @@ export class PinsService {
     localStorage.setItem('pins', JSON.stringify(filteredPins));
   }
 
-  getAllPinImages(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/images`);
-  }
-
   getPinImage(image: string): any {
     return this.http.get(`${this.baseUrl}/images/${image}`);
   }

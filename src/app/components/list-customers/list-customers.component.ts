@@ -37,7 +37,7 @@ export class ListCustomersComponent {
   }
 
   getCustomers(){
-    this.customers = this.customerService.getCustomers();
+    this.customers = this.customerService.getCustomers().reverse();
     this.collectionSize = this.customers.length;
   }
 
