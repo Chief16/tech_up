@@ -1,0 +1,93 @@
+<div class="container-fluid py-4 px-4">
+  <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-3 shadow-sm mb-4">
+    <div class="d-flex flex-grow-1 me-4">
+      <div class="input-group">
+        <span class="input-group-text border-end-0 bg-transparent">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control border-start-0 shadow-none"
+          placeholder="Search pins..."
+          [formControl]="searchText"
+        />
+      </div>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary px-4 py-2" (click)="addCustomer()">
+        Add Customer
+      </button>
+      <button class="btn btn-primary px-4 py-2" (click)="addPin()">
+        Add Pin
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-3 shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr class="bg-light">
+            <th class="px-4 py-3 border-bottom">Title</th>
+            <th class="px-4 py-3 border-bottom">Image</th>
+            <th class="px-4 py-3 border-bottom">Collaboratory</th>
+            <th class="px-4 py-3 border-bottom">Privacy</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pin of pins; track pin.title) {
+            <tr>
+              <td class="px-4 py-3">{{ pin.title }}</td>
+              <td class="px-4 py-3">
+                <div class="bg-light rounded-2 d-flex align-items-center justify-content-center" 
+                     style="width: 48px; height: 48px">
+                  <i class="bi bi-image-fill text-secondary fs-5"></i>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="px-3 py-2 text-secondary">
+                    {{  pin.collabatory.join(", ") }}
+                  </span>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <span class="badge rounded-pill bg-success-subtle px-3 py-2">
+                  <i class="bi bi-globe2 me-1"></i>
+                  <span class="fw-medium" [ngClass]="pin.privacy === 'Public' ? 'text-success' : 'text-danger'">{{ pin.privacy }}</span>
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="text-center py-4 text-muted">No pins found</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <ngb-pagination
+      [collectionSize]="collectionSize"
+      [(page)]="currentPage"
+      [pageSize]="itemsPerPage"
+      [maxSize]="5"
+      class="pagination-sm mb-0"
+      (pageChange)="refreshCountries()"
+    >
+    </ngb-pagination>
+
+    <select 
+      class="form-select form-select-sm shadow-none" 
+      style="width: auto" 
+      [(ngModel)]="itemsPerPage"
+      name="pageSize"
+    >
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
+  </div>
+</div>

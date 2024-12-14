@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <h4 class="modal-title">Create Customer</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="userForm">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title*</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="title" 
+        formControlName="title"
+        [class.is-invalid]="userForm.get('title')?.invalid && userForm.get('title')?.touched"
+      >
+      <div class="invalid-feedback" *ngIf="userForm.get('title')?.errors?.['required']">
+        Title is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email*</label>
+      <input 
+        type="email" 
+        class="form-control" 
+        id="email" 
+        formControlName="email"
+        [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+      >
+      <div class="invalid-feedback" *ngIf="userForm.get('email')?.errors?.['required']">
+        Email is required
+      </div>
+      <div class="invalid-feedback" *ngIf="userForm.get('email')?.errors?.['email']">
+        Please enter a valid email
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="region" class="form-label">Region*</label>
+      <ngx-select
+        formControlName="region"
+        [items]="regions | async"
+        placeholder="Select a region"
+        [class.is-invalid]="userForm.get('region')?.invalid && userForm.get('region')?.touched"
+      >
+      </ngx-select>
+      <div class="invalid-feedback" *ngIf="userForm.get('region')?.errors?.['required']">
+        Region is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="country" class="form-label">Country*</label>
+      <ngx-select
+        formControlName="country"
+        [items]="countries"
+        placeholder="Select a region"
+        [class.is-invalid]="userForm.get('country')?.invalid && userForm.get('country')?.touched"
+      >
+      </ngx-select>
+      <div class="invalid-feedback" *ngIf="userForm.get('country')?.errors?.['required']">
+        Country is required
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+  <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="submitForm()"
+    [disabled]="userForm.invalid"
+  >
+    Create Customer
+  </button>
+</div>
