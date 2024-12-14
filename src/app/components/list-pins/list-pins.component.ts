@@ -1,89 +1,48 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, viewChild } from '@angular/core';
 import { LocationService } from '../../shared/services/location.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { AddCustomerModalComponent } from '../../shared/components/add-customer-modal/add-customer-modal.component';
 import { AddPinModalComponent } from '../../shared/components/add-pin-modal/add-pin-modal.component';
-import { NgClass } from '@angular/common';
-
-const PINS = [
-  {
-    title: 'Pin 1',
-    image: 'https://via.placeholder.com/150',
-    collabatory: ['User 1', 'User 2'],
-    privacy: 'Public',
-  },
-  {
-    title: 'Pin 2',
-    image: 'https://via.placeholder.com/150',
-    collabatory: ['User 3', 'User 4'],
-    privacy: 'Private',
-  },
-  {
-    title: 'Pin 3',
-    image: 'https://via.placeholder.com/150',
-    collabatory: ['User 5', 'User 6'],
-    privacy: 'Public',
-  },
-  {
-    title: 'Pin 4',
-    image: 'https://via.placeholder.com/150',
-    collabatory: ['User 7', 'User 8'],
-    privacy: 'Private',
-  },
-];
-
-interface Pins {
-  title: string;
-  image: string;
-  collabatory: string[];
-  privacy: 'Public' | 'Private';
-}
+import { NgClass, NgIf, SlicePipe } from '@angular/common';
+import { PinsService } from '../../shared/services/pins.service';
+import { PinI } from '../../shared/models/pin';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-list-pins',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbPaginationModule, FormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgbPaginationModule, FormsModule, NgClass, NgIf, SlicePipe],
+  providers: [LocationService, PinsService],
   templateUrl: './list-pins.component.html',
   styleUrl: './list-pins.component.scss',
 })
 export class ListPinsComponent implements OnInit {
   locationService = inject(LocationService);
+  pinsService = inject(PinsService);
+  toastService = inject(ToastService);
   modalService = inject(NgbModal);
+
+  successElement = viewChild('success');
+  errorElement = viewChild('error');
 
   searchText = new FormControl<string>('', {nonNullable: true});
 
   itemsPerPage = 4;
   currentPage = 1;
-  collectionSize = PINS.length;
+  collectionSize = 0;
 
-  pins: any[] = [];
+  pins: PinI[] = [];
 
   ngOnInit(): void {
-    this.refreshCountries();
-    this.searchText.valueChanges.subscribe((value) => {
-      this.pins = PINS.filter((pin) => pin.title.includes(value));
-    });
+    this.getPins();
   }
 
-  addCustomer() {
-    const modalRef = this.modalService.open(AddCustomerModalComponent, {
-      centered: true,
-      backdrop: 'static',
-    });
-
-    modalRef.result.then(
-      (result) => {
-        console.log('Modal closed with result:', result);
-        // Handle the form submission result here
-      },
-      (reason) => {
-        console.log('Modal dismissed');
-      }
-    );
+  getPins(){
+    this.pins = this.pinsService.getPins();
+    this.collectionSize = this.pins.length;
   }
 
-  addPin() {
+  addPin( success: TemplateRef<string>, error: TemplateRef<string>) {
     const modalRef = this.modalService.open(AddPinModalComponent, {
       centered: true,
       backdrop: 'static',
@@ -92,18 +51,20 @@ export class ListPinsComponent implements OnInit {
     modalRef.result.then(
       (result) => {
         console.log('Modal closed with result:', result);
-        // Handle the form submission result here
+        this.pinsService.addPin(result);
+        this.getPins();
+        this.toastService.show({ template: success });
       },
       (reason) => {
         console.log('Modal dismissed');
+        this.toastService.show({ template: error, classname: 'bg-danger text-light' });
       }
     );
   }
 
-  refreshCountries() {
-    this.pins = PINS.map((pin, i) => ({ id: i + 1, ...pin })).slice(
-      (this.currentPage - 1) * this.itemsPerPage,
-      (this.currentPage - 1) * this.itemsPerPage + this.itemsPerPage
-    );
+  getFilteredPins() {
+    const filteredPins = this.pins.filter((pin) => pin.title.includes(this.searchText.value));
+    this.collectionSize = filteredPins.length;
+    return filteredPins;
   }
 }

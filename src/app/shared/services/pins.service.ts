@@ -6,8 +6,6 @@ import { PinI } from '../models/pin';
 })
 export class PinsService {
 
-  constructor() { }
-
   getPins(): PinI[] {
     const pins = localStorage.getItem('pins');
     return pins ? JSON.parse(pins) : [];

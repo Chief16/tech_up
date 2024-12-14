@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CustomerI } from '../models/customer';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class CustomerService {
-
-  constructor() { }
 
   getCustomers(): CustomerI[] {
     const customers = localStorage.getItem('customers');

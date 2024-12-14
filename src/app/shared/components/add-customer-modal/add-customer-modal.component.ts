@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-add-customer-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbModalModule, NgIf, NgFor, AsyncPipe, NgxSelectModule],
+  imports: [ReactiveFormsModule, NgbModalModule, NgIf, AsyncPipe, NgxSelectModule],
   templateUrl: './add-customer-modal.component.html',
   styleUrl: './add-customer-modal.component.scss'
 })

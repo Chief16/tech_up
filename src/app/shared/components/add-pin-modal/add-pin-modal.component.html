@@ -37,10 +37,11 @@
     </div>
 
     <div class="mb-3">
-      <label for="collaborators" class="form-label">Select Collaboratory*</label>
-      <ngx-select [formControl]="collaboratorsControl"
+      <label for="collaborators" class="form-label">Select Collaborators*</label>
+      <ngx-select formControlName="collaborators"
                   [allowClear]="true"
                   [items]="collaborators"
+                  [multiple]="true"
                   placeholder="No collaborator selected">
       </ngx-select>
       <div class="invalid-feedback" *ngIf="pinForm.get('collaborators')?.errors?.['required']">
@@ -56,7 +57,7 @@
             class="form-check-input" 
             type="radio" 
             id="privatePrivacy" 
-            value="private"
+            value="Private"
             formControlName="privacy"
           >
           <label class="form-check-label" for="privatePrivacy">
@@ -68,7 +69,7 @@
             class="form-check-input" 
             type="radio" 
             id="publicPrivacy" 
-            value="public"
+            value="Public"
             formControlName="privacy"
           >
           <label class="form-check-label" for="publicPrivacy">
