@@ -32,14 +32,22 @@ export class ListPinsComponent implements OnInit {
   collectionSize = 0;
 
   pins: PinI[] = [];
+  images: any[] = [];
 
   ngOnInit(): void {
     this.getPins();
   }
 
   getPins(){
-    this.pins = this.pinsService.getPins();
+    this.pins = this.pinsService.getPins()
+      .map((pin: PinI) => {
+        return {
+          ...pin,
+          image: encodeURI(pin.image)
+        }
+      });
     this.collectionSize = this.pins.length;
+    this.getImages();
   }
 
   addPin( success: TemplateRef<string>, error: TemplateRef<string>) {
@@ -50,21 +58,29 @@ export class ListPinsComponent implements OnInit {
 
     modalRef.result.then(
       (result) => {
-        console.log('Modal closed with result:', result);
-        this.pinsService.addPin(result);
-        this.getPins();
         this.toastService.show({ template: success });
+        this.getPins();
       },
       (reason) => {
-        console.log('Modal dismissed');
         this.toastService.show({ template: error, classname: 'bg-danger text-light' });
       }
     );
   }
 
   getFilteredPins() {
-    const filteredPins = this.pins.filter((pin) => pin.title.includes(this.searchText.value));
+    const filteredPins = this.pins.filter((pin) => pin?.title.includes(this.searchText.value));
     this.collectionSize = filteredPins.length;
     return filteredPins;
+  }
+
+  getImages() {
+    this.pinsService.getAllPinImages().subscribe((images) => {
+      this.images = images;
+      console.log(this.images);
+    });
+  }
+
+  getImage(imageName: string){
+    return this.images?.find((img) => img.filename === imageName)?.url;
   }
 }

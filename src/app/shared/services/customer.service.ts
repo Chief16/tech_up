@@ -13,4 +13,9 @@ export class CustomerService {
     customers.push(customer);
     localStorage.setItem('customers', JSON.stringify(customers));
   }
+
+  checkIfCustomerExists(name: string): boolean {
+    const customers = this.getCustomers();
+    return !!customers.find(c => c.title === name);
+  }
 }

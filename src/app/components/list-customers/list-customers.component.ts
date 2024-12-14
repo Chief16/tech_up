@@ -49,8 +49,6 @@ export class ListCustomersComponent {
 
     modalRef.result.then(
       (result) => {
-        console.log('Modal closed with result:', result);
-        this.customerService.addCustomers(result);
         this.getCustomers();
         this.toastService.show({ template: success });
       },

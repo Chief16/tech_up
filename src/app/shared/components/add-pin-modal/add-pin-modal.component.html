@@ -5,7 +5,7 @@
 
 <div class="modal-body">
   <form [formGroup]="pinForm">
-    <div class="mb-3">
+    <div class="mb-4">
       <label for="title" class="form-label">Title*</label>
       <input 
         type="text" 
@@ -17,39 +17,79 @@
       <div class="invalid-feedback" *ngIf="pinForm.get('title')?.errors?.['required']">
         Title is required
       </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="image" class="form-label">Select Image*</label>
-      <div class="input-group">
-        <input 
-          type="file" 
-          class="form-control" 
-          id="image" 
-          formControlName="image"
-          accept="image/*"
-          [class.is-invalid]="pinForm.get('image')?.invalid && pinForm.get('image')?.touched"
-        >
-      </div>
-      <div class="invalid-feedback" *ngIf="pinForm.get('image')?.errors?.['required']">
-        Image is required
+      <div class="invalid-feedback" *ngIf="pinForm.get('title')?.errors?.['exists']">
+        Title already exists
       </div>
     </div>
 
-    <div class="mb-3">
-      <label for="collaborators" class="form-label">Select Collaborators*</label>
-      <ngx-select formControlName="collaborators"
-                  [allowClear]="true"
-                  [items]="collaborators"
-                  [multiple]="true"
-                  placeholder="No collaborator selected">
+    <!-- File Upload Section -->
+    <div class="mb-4">
+      <label class="form-label">Select Image*</label>
+      <div class="file-upload-container" 
+           [class.is-invalid]="!hasFile && pinForm.get('image')?.touched">
+        <div class="drop-zone p-4 rounded-3 text-center"
+             ng2FileDrop
+             [ngClass]="{'drag-over': hasBaseDropZoneOver}"
+             [uploader]="uploader"
+             (fileOver)="fileOverDropZone($event)">
+          
+          @if (!hasFile) {
+            <div>
+              <i class="bi bi-cloud-upload fs-3 text-primary mb-2"></i>
+              <p class="mb-1">Drag and drop your image here</p>
+              <p class="text-muted small">or</p>
+              <label class="btn btn-outline-primary btn-sm">
+                Browse Files
+                <input
+                  type="file"
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  accept="image/*"
+                  style="display: none;"
+                />
+              </label>
+            </div>
+          } @else {
+            <div>
+              <img 
+                [src]="previewUrl" 
+                class="preview-image mb-2 rounded-2" 
+                *ngIf="previewUrl"
+              >
+              <p class="mb-2">{{ uploader.queue[0]!.file!.name }}</p>
+              <button 
+                type="button" 
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeFile()"
+              >
+                Remove File
+              </button>
+            </div>
+          }
+        </div>
+        <div class="invalid-feedback" *ngIf="!hasFile && pinForm.get('image')?.touched">
+          Image is required
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Select Collaboratory*</label>
+      <ngx-select
+        formControlName="collaborators"
+        [allowClear]="true"
+        [items]="customerNames"
+        [multiple]="true"
+        placeholder="Select collaborators"
+        [class.is-invalid]="pinForm.get('collaborators')?.invalid && pinForm.get('collaborators')?.touched"
+      >
       </ngx-select>
       <div class="invalid-feedback" *ngIf="pinForm.get('collaborators')?.errors?.['required']">
         At least one collaborator is required
       </div>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
       <label class="form-label">Privacy*</label>
       <div class="d-flex gap-4">
         <div class="form-check">
@@ -87,7 +127,7 @@
     type="button" 
     class="btn btn-primary" 
     (click)="submitForm()"
-    [disabled]="pinForm.invalid"
+    [disabled]="pinForm.invalid || !hasFile"
   >
     Create Pin
   </button>

@@ -1,20 +1,23 @@
-import { AsyncPipe, NgFor, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { LocationService } from '../../services/location.service';
 import { NgxSelectModule } from 'ngx-select-ex';
-import { Observable } from 'rxjs';
+import { CustomerService } from '../../services/customer.service';
+import { CustomerI } from '../../models/customer';
 
 @Component({
   selector: 'app-add-customer-modal',
   standalone: true,
   imports: [ReactiveFormsModule, NgbModalModule, NgIf, AsyncPipe, NgxSelectModule],
+  providers: [CustomerService],
   templateUrl: './add-customer-modal.component.html',
   styleUrl: './add-customer-modal.component.scss'
 })
 export class AddCustomerModalComponent implements OnInit {
 
+  customerService = inject(CustomerService);
   activeModal = inject(NgbActiveModal);
   locationService = inject(LocationService);
 
@@ -37,7 +40,13 @@ export class AddCustomerModalComponent implements OnInit {
 
   submitForm() {
     if (this.userForm.valid) {
-      this.activeModal.close(this.userForm.value);
+      const exists = this.customerService.checkIfCustomerExists(this.userForm.value.title as string);
+      if(exists) {
+        this.userForm.get('title')?.setErrors({exists: true});
+        return;
+      }
+      this.customerService.addCustomers(this.userForm.value as CustomerI);
+      this.activeModal.close(true);
     } else {
       Object.keys(this.userForm.controls).forEach(key => {
         const control = this.userForm.get(key);

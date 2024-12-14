@@ -14,6 +14,9 @@
         formControlName="title"
         [class.is-invalid]="userForm.get('title')?.invalid && userForm.get('title')?.touched"
       >
+      <div class="invalid-feedback" *ngIf="userForm.get('title')?.errors?.['exists']">
+        Title already exists
+      </div>
       <div class="invalid-feedback" *ngIf="userForm.get('title')?.errors?.['required']">
         Title is required
       </div>

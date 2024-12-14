@@ -1,0 +1,23 @@
+.drop-zone {
+  border: 2px dashed #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.drop-zone.drag-over {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.file-upload-container {
+  position: relative;
+}
+
+.file-upload-container.is-invalid .drop-zone {
+  border-color: #dc3545;
+}
