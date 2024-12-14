@@ -112,7 +112,7 @@ export class AddPinModalComponent implements OnInit {
   submitForm() {
     if (this.pinForm.valid && this.hasFile) {
       if(this.pin){
-        this.pinService.updatePin(this.pinForm.value);
+        this.pinService.updatePin(this.pinForm.getRawValue());
       } else {
         const exists = this.pinService.checkIfPinExists(this.pinForm.value.title);
         if (exists) {

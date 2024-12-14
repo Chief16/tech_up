@@ -46,7 +46,7 @@ export class AddCustomerModalComponent implements OnInit {
   submitForm() {
     if (this.userForm.valid) {
       if(this.customer){
-        this.customerService.updateCustomer(this.userForm.value as CustomerI);
+        this.customerService.updateCustomer(this.userForm.getRawValue() as CustomerI);
       } else {
         const exists = this.customerService.checkIfCustomerExists(this.userForm.value.title as string);
         if(exists) {

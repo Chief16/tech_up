@@ -2,3 +2,8 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+
+td, th, button {
+  white-space: nowrap;
+}
