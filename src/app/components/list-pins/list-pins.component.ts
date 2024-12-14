@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, TemplateRef, viewChild } from '@angular/core';
-import { LocationService } from '../../shared/services/location.service';
+import { LocationService } from '../../shared/services/location/location.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { AddPinModalComponent } from '../../shared/components/add-pin-modal/add-pin-modal.component';
 import { NgClass, NgIf, SlicePipe } from '@angular/common';
-import { PinsService } from '../../shared/services/pins.service';
 import { PinI } from '../../shared/models/pin';
-import { ToastService } from '../../shared/services/toast.service';
+import { ToastService } from '../../shared/services/toast/toast.service';
+import { PinsService } from '../../shared/services/pins/pins.service';
 
 @Component({
   selector: 'app-list-pins',

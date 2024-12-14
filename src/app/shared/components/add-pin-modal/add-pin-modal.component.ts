@@ -1,4 +1,4 @@
-import { CustomerService } from './../../services/customer.service';
+import { CustomerService } from '../../services/customer/customer.service';
 import { NgClass, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
@@ -10,10 +10,7 @@ import {
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { FileUploader, FileUploadModule } from 'ng2-file-upload';
-import { PinI } from '../../models/pin';
-import { PinsService } from '../../services/pins.service';
-import { CustomerI } from '../../models/customer';
-
+import { PinsService } from '../../services/pins/pins.service';
 @Component({
   selector: 'app-add-pin-modal',
   standalone: true,

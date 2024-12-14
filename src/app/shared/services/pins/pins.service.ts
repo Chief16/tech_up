@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PinI } from '../models/pin';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PinI } from '../../models/pin';
 
 @Injectable({
   providedIn: 'root'

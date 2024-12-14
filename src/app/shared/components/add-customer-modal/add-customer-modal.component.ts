@@ -2,9 +2,9 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { LocationService } from '../../services/location.service';
+import { LocationService } from '../../services/location/location.service';
 import { NgxSelectModule } from 'ngx-select-ex';
-import { CustomerService } from '../../services/customer.service';
+import { CustomerService } from '../../services/customer/customer.service';
 import { CustomerI } from '../../models/customer';
 
 @Component({

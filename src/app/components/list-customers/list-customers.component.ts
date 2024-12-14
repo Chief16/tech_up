@@ -3,10 +3,10 @@ import { Component, inject, TemplateRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { NgbPaginationModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddCustomerModalComponent } from '../../shared/components/add-customer-modal/add-customer-modal.component';
-import { CustomerService } from '../../shared/services/customer.service';
-import { LocationService } from '../../shared/services/location.service';
+import { CustomerService } from '../../shared/services/customer/customer.service';
+import { LocationService } from '../../shared/services/location/location.service';
 import { CustomerI } from '../../shared/models/customer';
-import { ToastService } from '../../shared/services/toast.service';
+import { ToastService } from '../../shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-list-customers',
