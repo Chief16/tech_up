@@ -41,27 +41,30 @@ export class ListCustomersComponent {
     this.collectionSize = this.customers.length;
   }
 
-  addCustomer(success: TemplateRef<any>, error: TemplateRef<any>) {
+  addCustomer(success: TemplateRef<any>, error: TemplateRef<any>, customer?: CustomerI) {
     const modalRef = this.modalService.open(AddCustomerModalComponent, {
       centered: true,
       backdrop: 'static',
     });
+    modalRef.componentInstance.customer = customer;
 
     modalRef.result.then(
       (result) => {
         this.getCustomers();
         this.toastService.show({ template: success });
       },
-      (reason) => {
-        console.log('Modal dismissed');
-        this.toastService.show({ template: error});
-      }
+      (reason) => {}
     );
   }
 
-  getFilteredPins() {
-    const filteredPins = this.customers.filter((cus) => cus.title.includes(this.searchText.value));
-    this.collectionSize = filteredPins.length;
-    return filteredPins;
+  deleteCustomer(title: string, success: TemplateRef<any>, error: TemplateRef<any>): void {
+    this.customerService.deleteCustomer(title);
+    this.getCustomers();
+  }
+
+  getFilteredCustomers() {
+    const filteredCustomers = this.customers.filter((cus) => cus.title.includes(this.searchText.value));
+    this.collectionSize = filteredCustomers.length;
+    return filteredCustomers;
   }
 }

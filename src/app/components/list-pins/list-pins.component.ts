@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, TemplateRef, viewChild } from '@angular/core';
+import { Component, inject, model, OnInit, TemplateRef, viewChild } from '@angular/core';
 import { LocationService } from '../../shared/services/location/location.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
@@ -50,11 +50,12 @@ export class ListPinsComponent implements OnInit {
     this.getImages();
   }
 
-  addPin( success: TemplateRef<string>, error: TemplateRef<string>) {
+  addPin( success: TemplateRef<string>, error: TemplateRef<string>, pin?: PinI) {
     const modalRef = this.modalService.open(AddPinModalComponent, {
       centered: true,
       backdrop: 'static',
     });
+    modalRef.componentInstance.pin = pin;
 
     modalRef.result.then(
       (result) => {
@@ -62,9 +63,14 @@ export class ListPinsComponent implements OnInit {
         this.getPins();
       },
       (reason) => {
-        this.toastService.show({ template: error, classname: 'bg-danger text-light' });
+        // this.toastService.show({ template: error, classname: 'bg-danger text-light' });
       }
     );
+  }
+
+  deletePin(title: string, success: TemplateRef<any>, error: TemplateRef<any>): void {
+    this.pinsService.deletePin(title);
+    this.getPins();
   }
 
   getFilteredPins() {

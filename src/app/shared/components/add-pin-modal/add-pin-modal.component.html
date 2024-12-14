@@ -21,57 +21,57 @@
         Title already exists
       </div>
     </div>
-
-    <!-- File Upload Section -->
-    <div class="mb-4">
-      <label class="form-label">Select Image*</label>
-      <div class="file-upload-container" 
-           [class.is-invalid]="!hasFile && pinForm.get('image')?.touched">
-        <div class="drop-zone p-4 rounded-3 text-center"
-             ng2FileDrop
-             [ngClass]="{'drag-over': hasBaseDropZoneOver}"
-             [uploader]="uploader"
-             (fileOver)="fileOverDropZone($event)">
-          
-          @if (!hasFile) {
-            <div>
-              <i class="bi bi-cloud-upload fs-3 text-primary mb-2"></i>
-              <p class="mb-1">Drag and drop your image here</p>
-              <p class="text-muted small">or</p>
-              <label class="btn btn-outline-primary btn-sm">
-                Browse Files
-                <input
-                  type="file"
-                  ng2FileSelect
-                  [uploader]="uploader"
-                  accept="image/*"
-                  style="display: none;"
-                />
-              </label>
-            </div>
-          } @else {
-            <div>
-              <img 
-                [src]="previewUrl" 
-                class="preview-image mb-2 rounded-2" 
-                *ngIf="previewUrl"
-              >
-              <p class="mb-2">{{ uploader.queue[0]!.file!.name }}</p>
-              <button 
-                type="button" 
-                class="btn btn-outline-danger btn-sm"
-                (click)="removeFile()"
-              >
-                Remove File
-              </button>
-            </div>
-          }
-        </div>
-        <div class="invalid-feedback" *ngIf="!hasFile && pinForm.get('image')?.touched">
-          Image is required
+    @if(!pin){
+      <div class="mb-4">
+        <label class="form-label">Select Image*</label>
+        <div class="file-upload-container" 
+             [class.is-invalid]="!hasFile && pinForm.get('image')?.touched">
+          <div class="drop-zone p-4 rounded-3 text-center"
+               ng2FileDrop
+               [ngClass]="{'drag-over': hasBaseDropZoneOver}"
+               [uploader]="uploader"
+               (fileOver)="fileOverDropZone($event)">
+            
+            @if (!hasFile) {
+              <div>
+                <i class="bi bi-cloud-upload fs-3 text-primary mb-2"></i>
+                <p class="mb-1">Drag and drop your image here</p>
+                <p class="text-muted small">or</p>
+                <label class="btn btn-outline-primary btn-sm">
+                  Browse Files
+                  <input
+                    type="file"
+                    ng2FileSelect
+                    [uploader]="uploader"
+                    accept="image/*"
+                    style="display: none;"
+                  />
+                </label>
+              </div>
+            } @else {
+              <div>
+                <img 
+                  [src]="previewUrl" 
+                  class="preview-image mb-2 rounded-2" 
+                  *ngIf="previewUrl"
+                >
+                <p class="mb-2">{{ uploader.queue[0]!.file!.name }}</p>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="removeFile()"
+                >
+                  Remove File
+                </button>
+              </div>
+            }
+          </div>
+          <div class="invalid-feedback" *ngIf="!hasFile && pinForm.get('image')?.touched">
+            Image is required
+          </div>
         </div>
       </div>
-    </div>
+    }
 
     <div class="mb-4">
       <label class="form-label">Select Collaboratory*</label>
@@ -129,6 +129,6 @@
     (click)="submitForm()"
     [disabled]="pinForm.invalid || !hasFile"
   >
-    Create Pin
+    {{ pin ? "Update" : "Add" }} Pin
   </button>
 </div>

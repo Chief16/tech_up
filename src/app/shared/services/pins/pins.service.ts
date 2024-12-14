@@ -28,6 +28,19 @@ export class PinsService {
     localStorage.setItem('pins', JSON.stringify(pins));
   }
 
+  updatePin(updatedPin: PinI){
+    const pins = this.getPins();
+    const index = pins.findIndex(p => p.title === updatedPin.title);
+    pins[index] = updatedPin;
+    localStorage.setItem('pins', JSON.stringify(pins));
+  }
+
+  deletePin(title: string){
+    const pins = this.getPins();
+    const filteredPins = pins.filter(p => p.title !== title);
+    localStorage.setItem('pins', JSON.stringify(filteredPins));
+  }
+
   getAllPinImages(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/images`);
   }

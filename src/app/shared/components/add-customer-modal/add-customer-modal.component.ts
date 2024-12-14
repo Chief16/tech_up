@@ -23,6 +23,7 @@ export class AddCustomerModalComponent implements OnInit {
 
   regions = this.locationService.getRegions();
   countries: string[] = [];
+  customer = null;
 
   userForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -36,16 +37,24 @@ export class AddCustomerModalComponent implements OnInit {
       if(region)
       this.locationService.getCountriesByRegion(region).subscribe(x => this.countries = x);
     });
+    if(this.customer){
+      this.userForm.patchValue(this.customer);
+    }
   }
 
   submitForm() {
     if (this.userForm.valid) {
-      const exists = this.customerService.checkIfCustomerExists(this.userForm.value.title as string);
-      if(exists) {
-        this.userForm.get('title')?.setErrors({exists: true});
-        return;
+      if(this.customer){
+        this.customerService.updateCustomer(this.userForm.value as CustomerI);
+      } else {
+        const exists = this.customerService.checkIfCustomerExists(this.userForm.value.title as string);
+        if(exists) {
+          this.userForm.get('title')?.setErrors({exists: true});
+          this.userForm.markAllAsTouched();
+          return;
+        }
+        this.customerService.addCustomers(this.userForm.value as CustomerI);
       }
-      this.customerService.addCustomers(this.userForm.value as CustomerI);
       this.activeModal.close(true);
     } else {
       Object.keys(this.userForm.controls).forEach(key => {

@@ -11,6 +11,7 @@ import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { FileUploader, FileUploadModule } from 'ng2-file-upload';
 import { PinsService } from '../../services/pins/pins.service';
+import { PinI } from '../../models/pin';
 @Component({
   selector: 'app-add-pin-modal',
   standalone: true,
@@ -37,6 +38,7 @@ export class AddPinModalComponent implements OnInit {
   hasFile = false;
   previewUrl: string | null = null;
   customerNames: string[] = [];
+  pin: PinI | null = null;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.pinForm = this.fb.group({
@@ -56,12 +58,16 @@ export class AddPinModalComponent implements OnInit {
 
   ngOnInit() {
     this.getCustomerNames();
+    if(this.pin){
+      this.pinForm.patchValue(this.pin);
+      this.previewUrl = this.pin.image;
+      this.hasFile = true;
+    }
     this.uploader.onAfterAddingFile = (fileItem) => {
       fileItem.withCredentials = false; // Important for CORS
       this.hasFile = true;
       this.pinForm.patchValue({ image: fileItem._file.name });
 
-      // Preview image
       const reader = new FileReader();
       reader.onload = (event: any) => {
         this.previewUrl = event.target.result;
@@ -77,7 +83,6 @@ export class AddPinModalComponent implements OnInit {
       try {
         const responseData = JSON.parse(response);
         console.log('Upload successful:', responseData);
-        // Store the file path or handle success
       } catch (error) {
         console.error('Error parsing response:', error);
       }
@@ -85,7 +90,6 @@ export class AddPinModalComponent implements OnInit {
 
     this.uploader.onErrorItem = (item, response, status, headers) => {
       console.error('Upload failed:', response);
-      // Handle error (show message to user, etc.)
     };
   }
 
@@ -106,13 +110,17 @@ export class AddPinModalComponent implements OnInit {
 
   submitForm() {
     if (this.pinForm.valid && this.hasFile) {
-      const exists = this.pinService.checkIfPinExists(this.pinForm.value.title);
-      if (exists) {
-        this.pinForm.get('title')!.setErrors({ exists: true });
-        return;
+      if(this.pin){
+        this.pinService.updatePin(this.pinForm.value);
+      } else {
+        const exists = this.pinService.checkIfPinExists(this.pinForm.value.title);
+        if (exists) {
+          this.pinForm.get('title')!.setErrors({ exists: true });
+          return;
+        }
+        this.uploader.uploadAll();
+        this.pinService.addPin(this.pinForm.value);
       }
-      this.uploader.uploadAll();
-      this.pinService.addPin(this.pinForm.value);
       this.activeModal.close(this.pinForm.value);
     }
   }

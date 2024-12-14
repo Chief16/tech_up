@@ -77,6 +77,6 @@
     (click)="submitForm()"
     [disabled]="userForm.invalid"
   >
-    Create Customer
+    {{ customer ? "Update" : "Add" }} Customer
   </button>
 </div>

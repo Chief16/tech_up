@@ -8,7 +8,7 @@
         <input
           type="text"
           class="form-control border-start-0 shadow-none"
-          placeholder="Search pins..."
+          placeholder="Search customers by title"
           [formControl]="searchText"
         />
       </div>
@@ -29,15 +29,24 @@
             <th class="px-4 py-3 border-bottom">Email</th>
             <th class="px-4 py-3 border-bottom">Region</th>
             <th class="px-4 py-3 border-bottom">Country</th>
+            <th class="px-4 py-3 border-bottom text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
-          @for (pin of getFilteredPins() | slice: (currentPage-1) * itemsPerPage : currentPage * itemsPerPage; track pin.title) {
+          @for (customer of getFilteredCustomers() | slice: (currentPage-1) * itemsPerPage : currentPage * itemsPerPage; track customer.title) {
             <tr>
-              <td class="px-4 py-3">{{ pin.title }}</td>
-              <td class="px-4 py-3">{{ pin.email }}</td>
-              <td class="px-4 py-3">{{ pin.region }}</td>
-              <td class="px-4 py-3">{{ pin.country }}</td>
+              <td class="px-4 py-3">{{ customer.title }}</td>
+              <td class="px-4 py-3">{{ customer.email }}</td>
+              <td class="px-4 py-3">{{ customer.region }}</td>
+              <td class="px-4 py-3">{{ customer.country }}</td>
+              <td class="px-4 py-3 text-end">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="addCustomer(success, error, customer)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCustomer(customer.title, success, error)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
             </tr>
           } @empty {
             <tr>
@@ -71,5 +80,5 @@
     </select>
   </div>
 </div>
-<ng-template #success>Added customer successfully</ng-template>
-<ng-template #error>Failed adding customer</ng-template>
+<ng-template #success>Action Successful</ng-template>
+<ng-template #error>Action Failed</ng-template>
